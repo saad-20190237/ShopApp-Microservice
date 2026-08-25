@@ -1,0 +1,29 @@
+services:
+  inventory-mysql:
+    image: mysql:8.0
+    container_name: inventory-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: inventory_db
+      MYSQL_USER: inventory_user
+      MYSQL_PASSWORD: inventory_password
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - inventory-mysql-data:/var/lib/mysql
+
+    labels:
+      org.springframework.boot.ignore: true
+
+
+    healthcheck:
+      test: ["CMD-SHELL"," mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+
+volumes:
+    inventory-mysql-data:
